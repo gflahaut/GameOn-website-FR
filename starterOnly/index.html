@@ -46,31 +46,39 @@
         je m'inscris
       </button>
     </div>
-
     <div class="bground">
       <div class="content">
         <span class="close"></span>
         <div class="modal-body">
+          <div id="confirmationMessage" class="d-none">
+             <p>Merci pour votre inscription</p>
+             <button id="confirmationButton">Fermer</button>
+          </div>
           <form name="reserve" action="index.html" method="get" id="reserve">
             <div class="formData">
               <label for="firstname">Prénom</label><br>
               <input class="text-control" type="text" id="firstname" name="firstname"><br>
+              <span id="errorFirstname" class="errorInput"></span>
             </div>
             <div class="formData">
               <label for="lastname">Nom</label><br>
               <input class="text-control" type="text" id="lastname" name="lastname"><br>
+              <span id="errorLastname" class="errorInput"></span>
             </div>
             <div class="formData">
               <label for="email">E-mail</label><br>
               <input class="text-control" type="email" id="email" name="email"><br>
+              <span id="errorEmail" class="errorInput"></span>
             </div>
             <div class="formData">
               <label for="birthdate">Date de naissance</label><br>
               <input class="text-control" type="date" id="birthdate" name="birthdate"><br>
+              <span id="errorBirthdate" class="errorInput"></span>
             </div>
             <div class="formData">
               <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
               <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+              <span id="errorQuantity" class="errorInput"></span>
             </div>
             <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
             <div class="formData">
@@ -99,7 +107,7 @@
                 <span class="checkbox-icon"></span>
                 Portland</label>
             </div>
-
+            <span id="errorLocation" class="errorInput"></span>
             <div class="formData">
               <input class="checkbox-input" type="checkbox" id="checkbox1" checked>
               <label class="checkbox2-label" for="checkbox1" required="required">
@@ -113,6 +121,7 @@
                 Je souhaite être prévenu des prochains évènements.
               </label>
               <br>
+              <span id="errorChexbox" class="errorInput"></span>
             </div>
             <input class="btn-submit" type="submit" class="button" value="C'est parti" />
           </form>
