@@ -99,6 +99,9 @@ img {
     display: block;
     margin-top: -15px;
   }
+  .bground{
+    padding: 1em;
+  }
 } 
 
 main {
@@ -436,8 +439,8 @@ input[data-error]::after {
   z-index: 1;
 }
 .hero-headline {
-  font-size: 6rem;
-  font-weight: normal;
+  font-size: 2.5rem;
+  font-weight: bold;
   white-space: nowrap;
 }
 .hero-text {
