@@ -1,8 +1,8 @@
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const formulaire = document.querySelector("form");
-let confirmationMessage = document.querySelector("#confirmationMessage");
-const confirmationButton = document.querySelector("#confirmationButton");
+const confirmationMessage = document.querySelector(".msg-confirmation");
+const confirmationButton = document.querySelector(".btn-confirmation");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const closeButton = document.querySelector(".close");
 
@@ -36,7 +36,7 @@ function checkForm() {
   const inputFirstname = document.getElementById("firstname");
   const inputLastname = document.getElementById("lastname");
   const inputEmail = document.getElementById("email");
-  const inputBirthdate = document.getElementById("birthBirthdate");
+  const inputBirthdate = document.getElementById("birthdate");
   const inputQuantity = document.getElementById("quantity");
   const inputCheckbox = document.getElementById("checkbox1");
   const regExEmail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -51,13 +51,13 @@ function checkForm() {
     setErrorText(element, "");
   };
   if (inputFirstname.value.length < 2) {
-    setErrorText("errorFirstname", "Vous n'avez pas précisé de Lastname !");
+    setErrorText("errorFirstname", "Vous n'avez pas précisé de prénoms !");
     validForm = false;
   } else {
     clearErrorText("errorFirstname");
   }
   if (inputLastname.value.length < 2) {
-    setErrorText("errorLastname", "Vous n'avez pas précisé de Lastnames !");
+    setErrorText("errorLastname", "Vous n'avez pas précisé de noms !");
     validForm = false;
   } else {
     clearErrorText("errorLastname");
@@ -76,115 +76,126 @@ function checkForm() {
   }
 
   //Today's Birthdate
-   const BirthdateToday = new Birthdate();
-// Calculating the Birthdate 100 years ago
-const Birthdate100Years = new Birthdate(BirthdateToday);
-Birthdate100Years.setFullYear(BirthdateToday.getFullYear() - 100);
-// Calculating the Birthdate 18 years ago
-const Birthdate18Years = new Birthdate(BirthdateToday);
-Birthdate18Years.setFullYear(BirthdateToday.getFullYear() - 18);
-// Retrieval of the original Birthdates
-const BirthdateOriginMin = new Birthdate(Birthdate18Years);
-const BirthdateOriginMax = new Birthdate(Birthdate100Years);
-// Function to format a Birthdate as "yyyy-mm-dd"
-function BirthdateFormater(BirthdateOrigin) {
-  const year = BirthdateOrigin.getFullYear();
-  const month = String(BirthdateOrigin.getMonth() + 1).padStart(2, "0"); // Les mois commencent à 0, donc ajoutez 1 et formatez avec deux chiffres
-  const day = String(BirthdateOrigin.getBirthdate()).padStart(2, "0");
-  return `${year}${month}${day}`;
-}
-// Formatting the Birthdate in "yyyy-mm-dd" format
-const BirthdateMin = BirthdateFormater(BirthdateOriginMin);
-const BirthdateMax = BirthdateFormater(BirthdateOriginMax);
-
-if (inputBirthdate.value === "") {
-  setErrorText(
-    "errorBirthdate",
-    "Vous n'avez pas précisé votre date de naissance !"
-  );
-  validForm = false;
-} else if (
-  inputBirthdate.value.replaceAll("-", "") >= BirthdateMin ||
-  inputBirthdate.value.replaceAll("-", "") <= BirthdateMax
-) {
-  setErrorText(
-    "errorBirthdate",
-    "vous devez avoir plus de 18ans et moins de 100 ans pour vous inscrire !"
-  );
-  validForm = false;
-} else if (!regExBirthdate.test(inputBirthdate.value)) {
-  setErrorText(
-    "errorBirthdate",
-    "Le format de la Date de naissance précisée est invalide !"
-  );
-  validForm = false;
-} else {
-  clearErrorText("errorBirthdate");
-}
-
-if (inputQuantity.value === "") {
-  setErrorText(
-    "errorQuantity",
-    "Vous n'avez pas précisé le nombre de tournois auxquels vous avez participé !"
-  );
-  validForm = false;
-} else if (!regExQuantity.test(inputQuantity.value)) {
-  setErrorText("errorQuantity", "Veuillez entrer un nombre valide !");
-  validForm = false;
-} else {
-  clearErrorText("errorQuantity");
-}
-const radioButton = formulaire.elements["location"];
-  let selectedButton = false;
-  
-  for (let i = 0; i < radioButton.length; i += 1) {
-    if (radioButton[i].checked) {
-      selectedButton = true;
-      break;
-    }
+  const dateToday = new Date();
+  // Calculating the Birthdate 100 years ago
+  const date100Years = new Date(dateToday);
+  date100Years.setFullYear(dateToday.getFullYear() - 100);
+  // Calculating the Birthdate 18 years ago
+  const date18Years = new Date(dateToday);
+  date18Years.setFullYear(dateToday.getFullYear() - 18);
+  // Retrieval of the original Birthdates
+  const dateOriginMin = new Date(date18Years);
+  const dateOriginMax = new Date(date100Years);
+  // Function to format a Birthdate as "yyyy-mm-dd"
+  function dateFormater(dateOrigin) {
+    const year = dateOrigin.getFullYear();
+    const month = String(dateOrigin.getMonth() + 1).padStart(2, "0"); // Les mois commencent à 0, donc ajoutez 1 et formatez avec deux chiffres
+    const day = String(dateOrigin.getDate()).padStart(2, "0");
+    return `${year}${month}${day}`;
   }
-  
-  if (!selectedButton) {
-    setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
-    validForm = false;
-  } else {
-    clearErrorText("errorLocation");
-  }
-  
-  if (!inputCheckbox.checked) {
+  // Formatting the Birthdate in "yyyy-mm-dd" format
+  const dateMin = dateFormater(dateOriginMin);
+  const dateMax = dateFormater(dateOriginMax);
+
+  if (inputBirthdate.value === "") {
     setErrorText(
-      "errorCheckbox",
-      "Vous n'avez pas coché les Conditions d'utilisation !"
+      "errorBirthdate",
+      "Vous n'avez pas précisé votre date de naissance !"
+    );
+    validForm = false;
+  } else if (
+    inputBirthdate.value.replaceAll("-", "") >= dateMin ||
+    inputBirthdate.value.replaceAll("-", "") <= dateMax
+  ) {
+    setErrorText(
+      "errorBirthdate",
+      "vous devez avoir plus de 18ans et moins de 100 ans pour vous inscrire !"
+    );
+    validForm = false;
+  } else if (!regExBirthdate.test(inputBirthdate.value)) {
+    setErrorText(
+      "errorBirthdate",
+      "Le format de la Date de naissance précisée est invalide !"
     );
     validForm = false;
   } else {
-    clearErrorText("errorCheckbox");
+    clearErrorText("errorBirthdate");
   }
-  
-  const inputs = formulaire.querySelectorAll(
-    "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
-  );
-  
-  inputs.forEach((input) => {
-    if (input.value.trim() === "") {
-      input.classList.add("input-invalide");
-    } else {
-      input.classList.remove("input-invalide");
+
+  if (inputQuantity.value === "") {
+    setErrorText(
+      "errorQuantity",
+      "Vous n'avez pas précisé le nombre de tournois auxquels vous avez participé !"
+    );
+    validForm = false;
+  } else if (!regExQuantity.test(inputQuantity.value)) {
+    setErrorText("errorQuantity", "Veuillez entrer un nombre valide !");
+    validForm = false;
+  } else {
+    clearErrorText("errorQuantity");
+  }
+  const radioButton = formulaire.elements["location"];
+    let selectedButton = false;
+    
+    for (let i = 0; i < radioButton.length; i += 1) {
+      if (radioButton[i].checked) {
+        selectedButton = true;
+        break;
+      }
     }
-  });
-  
-  return validForm;
+    
+    if (!selectedButton) {
+      setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
+      validForm = false;
+    } else {
+      clearErrorText("errorLocation");
+    }
+    
+    if (!inputCheckbox.checked) {
+      setErrorText(
+        "errorCheckbox",
+        "Vous n'avez pas coché les Conditions d'utilisation !"
+      );
+      validForm = false;
+    } else {
+      clearErrorText("errorCheckbox");
+    }
+    
+    const inputs = formulaire.querySelectorAll(
+      "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
+    );
+    
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        input.classList.add("input-invalide");
+      } else {
+        input.classList.remove("input-invalide");
+      }
+    });
+    
+    return validForm;
 }
 
 // Form submission
 formulaire.addEventListener("submit", (event) => {
   event.preventDefault();
   if (checkForm()) {
+    const elements = formulaire.elements;
+    const formData = {};
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      if (element.type !== 'submit') {
+        formData[element.name] = element.value;
+      }
+    }
+    console.log(formData);
+    const formDataJSON = JSON.stringify(formData);
+    localStorage.setItem('formData', formDataJSON);
     confirmationMessage.appendChild(confirmationButton);
     confirmationMessage.classList.remove("d-none");
     toggleVisibility(formulaire, false);
     setTimeout(() => formulaire.submit(), 36000);
   } else {
-    alert("Le formulaire présente de nombreuses erreurs !");
+    alert("Le formulaire présente de nombreuses erreurs il ne peut être transmit !");
   }
-});   
+});
