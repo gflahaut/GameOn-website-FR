@@ -1,10 +1,46 @@
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+const modalForm = document.querySelector("#modal-form");
+const modalConfirmation = document.querySelector("#modal-confirmation");
 const formulaire = document.querySelector("form");
 const confirmationMessage = document.querySelector(".msg-confirmation");
 const confirmationButton = document.querySelector(".btn-confirmation");
 const modalBtn = document.querySelectorAll(".modal-btn");
-const closeButton = document.querySelector(".close");
+const closeButtonForm = document.querySelector("#close-modal-form");
+const closeButtonConfirmation = document.querySelector("#close-modal-confirmation");
+const closeButtonConfirmationBis = document.querySelector(".btn-confirmation");
+
+window.onload = function () {
+  if(localStorage.getItem("formData")){
+    confirmationMessage.appendChild(confirmationButton);
+    confirmationMessage.classList.remove("d-none");
+    launchModal(modalConfirmation, [closeButtonConfirmation, closeButtonConfirmationBis]);
+  }
+  //Launch modal event Function
+  modalBtn.forEach((btn) => btn.addEventListener("click", () => {
+    launchModal(modalForm, [closeButtonForm]);
+  }));
+  // Form submission
+  formulaire.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (checkForm()) {
+      const elements = formulaire.elements;
+      const formData = {};
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        if (element.type !== "submit") {
+          formData[element.name] = element.value;
+        }
+      }
+      const formDataJSON = JSON.stringify(formData);
+      localStorage.setItem("formData", formDataJSON);
+      formulaire.submit();
+    } else {
+      alert(
+        "Le formulaire présente de nombreuses erreurs il ne peut être transmit !"
+      );
+    }
+  });
+};
 
 //Toggle visibility Function
 function toggleVisibility(element, show) {
@@ -12,7 +48,7 @@ function toggleVisibility(element, show) {
   element.classList.remove("d-none", "d-block");
   element.classList.add(displayClass);
 }
-//Managing the responsive navbar Function 
+//Managing the responsive navbar Function
 function editNavbar() {
   var navBar = document.getElementById("myTopnav");
   if (navBar.className === "topnav") {
@@ -22,15 +58,16 @@ function editNavbar() {
   }
 }
 //Launch modal form Function
-function launchModal() {
-  toggleVisibility(modalbg, true);
-  closeButton.addEventListener("click", (reset) => {
-    toggleVisibility(modalbg, false);
-    return reset
-  });
+function launchModal(modal,closeButtons) {
+  toggleVisibility(modal, true);
+  for(let closeButton of closeButtons){
+    closeButton.addEventListener("click", (reset) => {
+      toggleVisibility(modal, false);
+      return reset;
+    });
+  }
 }
-//Launch modal event Function
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+
 // Form Validation Function
 function checkForm() {
   const inputFirstname = document.getElementById("firstname");
@@ -135,67 +172,43 @@ function checkForm() {
     clearErrorText("errorQuantity");
   }
   const radioButton = formulaire.elements["location"];
-    let selectedButton = false;
-    
-    for (let i = 0; i < radioButton.length; i += 1) {
-      if (radioButton[i].checked) {
-        selectedButton = true;
-        break;
-      }
-    }
-    
-    if (!selectedButton) {
-      setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
-      validForm = false;
-    } else {
-      clearErrorText("errorLocation");
-    }
-    
-    if (!inputCheckbox.checked) {
-      setErrorText(
-        "errorCheckbox",
-        "Vous n'avez pas coché les Conditions d'utilisation !"
-      );
-      validForm = false;
-    } else {
-      clearErrorText("errorCheckbox");
-    }
-    
-    const inputs = formulaire.querySelectorAll(
-      "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
-    );
-    
-    inputs.forEach((input) => {
-      if (input.value.trim() === "") {
-        input.classList.add("input-invalide");
-      } else {
-        input.classList.remove("input-invalide");
-      }
-    });
-    
-    return validForm;
-}
+  let selectedButton = false;
 
-// Form submission
-formulaire.addEventListener("submit", (event) => {
-  event.preventDefault();
-  if (checkForm()) {
-    const elements = formulaire.elements;
-    const formData = {};
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      if (element.type !== 'submit') {
-        formData[element.name] = element.value;
-      }
+  for (let i = 0; i < radioButton.length; i += 1) {
+    if (radioButton[i].checked) {
+      selectedButton = true;
+      break;
     }
-    console.log(formData);
-    const formDataJSON = JSON.stringify(formData);
-    localStorage.setItem('formData', formDataJSON);
-    confirmationMessage.appendChild(confirmationButton);
-    confirmationMessage.classList.remove("d-none");
-    toggleVisibility(formulaire, false);
-    setTimeout(() => formulaire.submit(), 36000);
-  } else {
-    alert("Le formulaire présente de nombreuses erreurs il ne peut être transmit !");
   }
-});
+
+  if (!selectedButton) {
+    setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
+    validForm = false;
+  } else {
+    clearErrorText("errorLocation");
+  }
+
+  if (!inputCheckbox.checked) {
+    setErrorText(
+      "errorCheckbox",
+      "Vous n'avez pas coché les Conditions d'utilisation !"
+    );
+    validForm = false;
+  } else {
+    clearErrorText("errorCheckbox");
+  }
+
+  const inputs = formulaire.querySelectorAll(
+    "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
+  );
+
+  inputs.forEach((input) => {
+    if (input.value.trim() === "") {
+      input.classList.add("input-invalide");
+    } else {
+      input.classList.remove("input-invalide");
+    }
+  });
+
+  return validForm;
+}
