@@ -19,7 +19,9 @@ window.onload = function () {
   modalBtn.forEach((btn) => btn.addEventListener("click", () => {
     launchModal(modalForm, [closeButtonForm]);
   }));
-  // Form submission
+  /**
+ * Gestion de la soumission du formulaire
+ */
   formulaire.addEventListener("submit", (event) => {
     event.preventDefault();
     if (checkForm()) {
@@ -42,13 +44,20 @@ window.onload = function () {
   });
 };
 
-//Toggle visibility Function
+/**
+ * Fonction pour basculer la visibilité d'un élément
+ * @param {HTMLElement} element - L'élément HTML à afficher ou cacher
+ * @param {boolean} show - Indique si l'élément doit être affiché (true) ou caché (false)
+ */
 function toggleVisibility(element, show) {
   const displayClass = show ? "d-block" : "d-none";
   element.classList.remove("d-none", "d-block");
   element.classList.add(displayClass);
 }
-//Managing the responsive navbar Function
+
+/**
+ * Fonction pour gérer la navigation responsive
+ */
 function editNavbar() {
   var navBar = document.getElementById("myTopnav");
   if (navBar.className === "topnav") {
@@ -57,7 +66,9 @@ function editNavbar() {
     navBar.className = "topnav";
   }
 }
-//Launch modal form Function
+/**
+ * Fonction pour ouvrir le modal
+ */
 function launchModal(modal,closeButtons) {
   toggleVisibility(modal, true);
   for(let closeButton of closeButtons){
@@ -70,6 +81,7 @@ function launchModal(modal,closeButtons) {
 
 // Form Validation Function
 function checkForm() {
+  // Sélection des éléments du formulaire
   const inputFirstname = document.getElementById("firstname");
   const inputLastname = document.getElementById("lastname");
   const inputEmail = document.getElementById("email");
@@ -81,12 +93,16 @@ function checkForm() {
   const regExQuantity = /^\d+$/;
   let validForm = true;
 
+  // Fonction pour définir un message d'erreur pour un élément
   const setErrorText = (element, message) => {
     document.getElementById(element).innerText = message;
   };
+
+  // Fonction pour effacer le message d'erreur d'un élément
   const clearErrorText = (element) => {
     setErrorText(element, "");
   };
+
   if (inputFirstname.value.length < 2) {
     setErrorText("errorFirstname", "Vous n'avez pas précisé de prénoms !");
     validForm = false;
@@ -172,43 +188,44 @@ function checkForm() {
     clearErrorText("errorQuantity");
   }
   const radioButton = formulaire.elements["location"];
-  let selectedButton = false;
-
-  for (let i = 0; i < radioButton.length; i += 1) {
-    if (radioButton[i].checked) {
-      selectedButton = true;
-      break;
+    let selectedButton = false;
+    
+    for (let i = 0; i < radioButton.length; i += 1) {
+      if (radioButton[i].checked) {
+        selectedButton = true;
+        break;
+      }
     }
-  }
-
-  if (!selectedButton) {
-    setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
-    validForm = false;
-  } else {
-    clearErrorText("errorLocation");
-  }
-
-  if (!inputCheckbox.checked) {
-    setErrorText(
-      "errorCheckbox",
-      "Vous n'avez pas coché les Conditions d'utilisation !"
-    );
-    validForm = false;
-  } else {
-    clearErrorText("errorCheckbox");
-  }
-
-  const inputs = formulaire.querySelectorAll(
-    "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
-  );
-
-  inputs.forEach((input) => {
-    if (input.value.trim() === "") {
-      input.classList.add("input-invalide");
+    
+    if (!selectedButton) {
+      setErrorText("errorLocation", "Aucun tournoi n'est sélectionné !");
+      validForm = false;
     } else {
-      input.classList.remove("input-invalide");
+      clearErrorText("errorLocation");
     }
-  });
-
-  return validForm;
+    
+    if (!inputCheckbox.checked) {
+      setErrorText(
+        "errorCheckbox",
+        "Vous n'avez pas coché les Conditions d'utilisation !"
+      );
+      validForm = false;
+    } else {
+      clearErrorText("errorCheckbox");
+    }
+    
+    const inputs = formulaire.querySelectorAll(
+      "input[type=text], input[type=email], input[type=number], input[type=radio], input[type=checkbox], input[type=date]"
+    );
+    
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        input.classList.add("input-invalide");
+      } else {
+        input.classList.remove("input-invalide");
+      }
+    });
+    // Si le formulaire est valide, renvoie true, sinon renvoie false
+    return validForm;
 }
+
